@@ -77,6 +77,8 @@ export const tasksReducer = (state: tasksStateType = initialState, action: Actio
             return newState;
         }
         case "CHANGE-TASK-TITLE": {
+
+            //do not working
             const newState = {...state};
             const taskToChange = newState[action.todoListId].find(t => t.id === action.taskId);
             if (taskToChange) {
