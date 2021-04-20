@@ -1,6 +1,6 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import {filterType, TaskType} from "./App";
-import AddItemForm from "./AddItemForm";
+import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, ButtonGroup, Checkbox, IconButton} from "@material-ui/core";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -18,7 +18,7 @@ type PropsType = {
     changeTodoListTitle: (title: string, todoListId: string) => void
 }
 
-export function Todolist(props: PropsType) {
+export const Todolist = React.memo((props: PropsType) => {
     const dispatch = useDispatch();
     let tasks = useSelector<AppRootState, Array<TaskType>>(state => state.tasks[props.todoListId]);
     if (props.filter === "active") {
@@ -31,17 +31,17 @@ export function Todolist(props: PropsType) {
     const setFilterActive = () => props.changeTodolistFilter("active", props.todoListId);
     const setFilterCompleted = () => props.changeTodolistFilter("completed", props.todoListId);
 
-    const addTask = (title: string) => {
+    const addTask = useCallback((title: string) => {
         dispatch(addTaskAC(title, props.todoListId));
-    };
+    }, [dispatch,props.todoListId]);
 
     const removeTodoList = () => {
         props.removeTodoList(props.todoListId)
     };
 
-    const changeTodoListTitle = (title: string) => {
+    const changeTodoListTitle = useCallback((title: string) => {
         props.changeTodoListTitle(title, props.todoListId);
-    };
+    }, [props]);
 
     const tasksToDisplay = tasks.map(t => {
         const removeTask = () => dispatch(removeTaskAC(t.id, props.todoListId));
@@ -88,4 +88,4 @@ export function Todolist(props: PropsType) {
             </div>
         </div>
     );
-}
+});

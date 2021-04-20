@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useCallback} from "react";
 import './App.css';
 import {Todolist} from './Todolist';
-import AddItemForm from "./AddItemForm";
+import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import {
@@ -35,21 +35,21 @@ function App() {
     const dispatch = useDispatch();
     const todoLists = useSelector<AppRootState, Array<TypeForTodoList>>(state => state.todoLists);
 
-    function addTodoList(title: string) {
+    const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListAC(title));
-    }
+    }, [dispatch]);
 
-    function changeTodoListTitle(title: string, todoListId: string) {
+    const changeTodoListTitle = useCallback((title: string, todoListId: string) => {
         dispatch(changeTodoListTitleAC(title, todoListId));
-    }
+    }, [dispatch]);
 
-    function changeTodolistFilter(filter: filterType, todoListId: string) {
+    const changeTodolistFilter = useCallback((filter: filterType, todoListId: string) => {
         dispatch(changeTodoListFilterAC(filter, todoListId));
-    }
+    }, [dispatch]);
 
-    function removeTodoList(todoListId: string) {
+    const removeTodoList = useCallback((todoListId: string) => {
         dispatch(removeTodoListAC(todoListId));
-    }
+    },[dispatch]);
 
     const tLists = todoLists.map(tl => {
         return (

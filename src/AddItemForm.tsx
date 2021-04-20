@@ -7,7 +7,7 @@ type PropsType = {
     addItem: (title: string) => void
 }
 
-function AddItemForm(props: PropsType) {
+export const AddItemForm=React.memo((props: PropsType)=> {
     const [inputValue, setInputValue] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
@@ -33,7 +33,6 @@ function AddItemForm(props: PropsType) {
 
     return (
         <div>
-
             <TextField size="small"
                        variant="outlined"
                        label="Type value"
@@ -46,6 +45,4 @@ function AddItemForm(props: PropsType) {
             <AddBoxIcon color="primary" fontSize="large" onClick={addItem}/>
         </div>
     );
-}
-
-export default AddItemForm;
+});
