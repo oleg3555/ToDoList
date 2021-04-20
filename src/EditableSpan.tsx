@@ -11,6 +11,7 @@ export const EditableSpan=React.memo((props: EditableSpanPropsType)=> {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [title, setTitle] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
+
     const exitEditMode = () => {
         if (title.trim() !== "") {
             setEditMode(false);

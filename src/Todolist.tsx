@@ -1,13 +1,13 @@
-import React, {ChangeEvent, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import {filterType, TaskType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
-import {Button, ButtonGroup, Checkbox, IconButton} from "@material-ui/core";
+import {Button, ButtonGroup, IconButton} from "@material-ui/core";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import DeleteIcon from '@material-ui/icons/Delete';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "./state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
+import {addTaskAC} from "./state/tasks-reducer";
+import {Task} from "./Task";
 
 type PropsType = {
     todoListId: string
@@ -33,7 +33,7 @@ export const Todolist = React.memo((props: PropsType) => {
 
     const addTask = useCallback((title: string) => {
         dispatch(addTaskAC(title, props.todoListId));
-    }, [dispatch,props.todoListId]);
+    }, [dispatch, props.todoListId]);
 
     const removeTodoList = () => {
         props.removeTodoList(props.todoListId)
@@ -41,25 +41,16 @@ export const Todolist = React.memo((props: PropsType) => {
 
     const changeTodoListTitle = useCallback((title: string) => {
         props.changeTodoListTitle(title, props.todoListId);
-    }, [props]);
+    }, [props.todoListId,props.changeTodoListTitle]);
 
     const tasksToDisplay = tasks.map(t => {
-        const removeTask = () => dispatch(removeTaskAC(t.id, props.todoListId));
-        const onChangeIsDone = (e: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeTaskStatusAC(t.id, e.currentTarget.checked, props.todoListId));
-        };
-        const changeTaskTitle = (title: string) => {
-            dispatch(changeTaskTitleAC(t.id, title, props.todoListId));
-        };
         return (
-            <div key={t.id} className={t.isDone ? "is-done" : ""}>
-                <Checkbox checked={t.isDone} onChange={onChangeIsDone}/>
-                <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
-                <IconButton size="small" onClick={removeTask} aria-label="delete">
-                    <DeleteIcon/>
-                </IconButton>
-            </div>
-        );
+            <Task
+                key={t.id}
+                todoListId={props.todoListId}
+                task={t}
+            />
+        )
     });
     return (
         <div>
